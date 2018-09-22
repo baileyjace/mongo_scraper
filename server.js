@@ -35,20 +35,17 @@ app.get("/", function(req, res) {
 // GET scrape
 app.get("/scrape", function(req, res) {
 
-    request("SITE GOES HERE", function(err, response, html) {
+    request("https://www.nytimes.com/", function(err, response, html) {
         var $ = cheerio.load(html);
 
-        $(".title-link").each(function(element) {
-            var title = $(element).children().text();
-            var link = $(element).attr("href");
-            var snippet = $(element).siblings("p").text();
-            var articleCreated = moment().format("YYY MM DD hh:mm:ss");
+        $("h2.story-heading").each(function(element) {
+            var title = $(element).children("a").text();
+            var link = $(element).children("a").attr("href");
+            
 
             var result = {
                 title: title,
                 link: link,
-                snippet: snippet,
-                articleCreated: articleCreated,
                 isSaved: false
             }
 
